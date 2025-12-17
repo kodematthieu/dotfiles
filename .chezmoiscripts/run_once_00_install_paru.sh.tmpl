@@ -1,0 +1,26 @@
+{{- if eq .chezmoi.osRelease.id "arch" -}}
+#!/bin/bash
+
+# Exit immediately if paru is already installed
+if command -v paru &> /dev/null; then
+    echo "Paru is already installed. Skipping."
+    exit 0
+fi
+
+echo "Paru not found. Bootstrapping..."
+
+# 1. Install build dependencies (base-devel + git)
+sudo pacman -S --needed --noconfirm base-devel git
+
+# 2. Clone and build paru
+# Create a temp directory
+TEMP_DIR=$(mktemp -d)
+git clone https://aur.archlinux.org/paru.git "$TEMP_DIR/paru"
+cd "$TEMP_DIR/paru"
+makepkg -si --noconfirm
+
+# 3. Cleanup
+rm -rf "$TEMP_DIR"
+
+echo "Paru installed successfully."
+{{- end -}}

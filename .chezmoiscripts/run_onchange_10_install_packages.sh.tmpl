@@ -1,0 +1,27 @@
+{{- if eq .chezmoi.osRelease.id "arch" -}}
+#!/bin/bash
+
+# 1. Define the source file location
+# We use joinPath to get the absolute path in the source directory
+PACKAGE_FILE={{ joinPath .chezmoi.sourceDir "packages/arch.txt" | quote }}
+
+# 2. Hash it to trigger updates
+# hash: {{ include "packages/arch.txt" | sha256sum }}
+
+echo "Reading packages from $PACKAGE_FILE..."
+
+# 3. Process the file:
+# - sed 's/#.*//'  : Deletes anything from '#' to end of line
+# - xargs          : Trims whitespace and joins lines into a single list
+TARGETS=$(sed 's/#.*//' "$PACKAGE_FILE" | xargs)
+
+if [ -z "$TARGETS" ]; then
+    echo "No packages found (or file is empty)."
+    exit 0
+fi
+
+# 4. Install
+echo "Installing: $TARGETS"
+paru -S --needed --noconfirm $TARGETS
+
+{{- end -}}

@@ -1,0 +1,55 @@
+# --- Dev Tools ---
+ripgrep          # CLI search tool
+fd               # CLI find tool
+neovim           # Text editor
+git              # Version control
+
+# --- Browsers ---
+helium-browser   # Web browser (hyprland.conf: $webBrowser)
+
+# --- Shell ---
+fish             # Shell (~/.config/fish)
+pkgfile          # Command-not-found helper
+
+# --- Display Manager ---
+greetd           # Display manager daemon
+regreet          # GTK4 greeter
+cage             # Wayland compositor for greeter
+
+# --- Desktop Environment (Hyprland) ---
+hyprland         # Window Manager (~/.config/hypr)
+hyprpaper        # Wallpaper utility (autostart.sh)
+hypridle         # Idle daemon (autostart.sh, eww/scripts/caffeine.lua)
+hyprlock         # Lock screen (hypridle.conf)
+hyprpolkitagent  # Auth agent (autostart.sh)
+
+# --- Status Bar & Notifications (EWW) ---
+eww              # Status bar (~/.config/eww, autostart.sh)
+swaync           # Notification daemon (autostart.sh)
+libnotify        # Notification library (notify-send)
+
+# --- Launchers & Menus ---
+rofi             # App launcher (hyprland.conf: $menu)
+wlogout          # Logout menu (eww/widgets.yuck)
+
+# --- Terminal & File Management ---
+kitty            # Terminal emulator (hyprland.conf: $terminal)
+dolphin          # File manager (hyprland.conf: $fileManager)
+
+# --- Clipboard ---
+wl-clipboard     # Clipboard utils (autostart.sh: wl-paste, wl-copy)
+cliphist         # Clipboard history (autostart.sh)
+
+# --- Screenshot ---
+grim             # Screenshot tool (eww/screenshot.lua)
+slurp            # Screen selection (eww/screenshot.lua)
+satty            # Screenshot annotation (eww/screenshot.lua)
+
+# --- Audio ---
+playerctl        # Media control (keybindings.conf)
+wireplumber      # Session manager
+pavucontrol      # GUI mixer (eww/widgets.yuck)
+
+# --- System Utils ---
+chezmoi          # Dotfile manager
+paru             # AUR helper
