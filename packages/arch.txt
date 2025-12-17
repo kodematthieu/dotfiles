@@ -10,6 +10,9 @@ helium-browser   # Web browser (hyprland.conf: $webBrowser)
 # --- Shell ---
 fish             # Shell (~/.config/fish)
 pkgfile          # Command-not-found helper
+starship         # Prompt (fish/conf.d/shell.fish)
+atuin            # Shell history (fish/conf.d/shell.fish)
+zoxide           # Smart cd (fish/conf.d/shell.fish)
 
 # --- Display Manager ---
 greetd           # Display manager daemon
@@ -50,6 +53,10 @@ playerctl        # Media control (keybindings.conf)
 wireplumber      # Session manager
 pavucontrol      # GUI mixer (eww/widgets.yuck)
 
-# --- System Utils ---
-chezmoi          # Dotfile manager
-paru             # AUR helper
+# --- Fonts ---
+ttf-jetbrains-mono-nerd  # Monospace font (eww, kitty)
+ttf-rubik                # UI font (eww, hyprlock)
+
+# --- Runtimes (installed via curl, see install script) ---
+# bun            # curl -fsSL https://bun.com/install | bash
+# uv             # curl -LsSf https://astral.sh/uv/install.sh | sh

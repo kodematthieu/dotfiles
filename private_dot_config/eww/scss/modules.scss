@@ -1,0 +1,113 @@
+// ============ NETWORK MENU ============
+.network-menu-box {
+    background-color: $base;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.net-header {
+    margin-bottom: 20px;
+
+    .wifi-icon {
+        font-size: 32px;
+        color: $blue;
+    }
+
+    .wifi-ssid {
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .wifi-ip {
+        color: $overlay0;
+        font-size: 12px;
+    }
+
+    .wifi-toggle {
+        font-size: 24px;
+
+        &.on {
+            color: $green;
+        }
+
+        &.off {
+            color: $red;
+        }
+    }
+}
+
+.wifi-item {
+    background-color: transparent;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s;
+
+    &:hover {
+        background-color: $surface1;
+    }
+
+    &.active {
+        background-color: $surface0;
+        border: 1px solid $blue;
+        color: $blue;
+    }
+
+    .item-icon {
+        font-size: 16px;
+    }
+
+    .item-ssid {
+        font-weight: 500;
+    }
+}
+
+.net-footer {
+    margin-top: 10px;
+
+    .net-btn {
+        padding: 8px 12px;
+        border-radius: 8px;
+        background-color: $surface0;
+        color: $text;
+        font-weight: bold;
+
+        &:hover {
+            background-color: $surface1;
+        }
+
+        &.advanced {
+            color: $teal;
+        }
+
+        &.close {
+            color: $red;
+        }
+    }
+}
+
+// ============ CALENDAR POPUP ============
+.calendar-popup {
+    background: rgba($base, 0.8);
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.calendar {
+    color: $text;
+    padding: 2px;
+
+    &.header {
+        color: $text;
+        font-weight: bold;
+    }
+
+    &:selected {
+        background-color: $blue;
+        color: $base;
+        border-radius: 5px;
+    }
+
+    &:indeterminate {
+        color: $overlay0;
+    }
+}

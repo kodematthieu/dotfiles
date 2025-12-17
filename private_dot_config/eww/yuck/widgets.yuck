@@ -1,0 +1,215 @@
+;; ============ LEFT WIDGETS ============
+(defwidget left-widgets []
+  (box :orientation "h" :space-evenly false :halign "start" :spacing 10
+    (sys-stats)
+    (workspaces)
+    (active-window-title)
+  )
+)
+
+(defwidget sys-stats []
+  (box :class "sys-stats" :orientation "h" :space-evenly false :halign "end"
+    (eventbox
+      :onhover "${EWW_CMD} update cpu-hover=true"
+      :onhoverlost "${EWW_CMD} update cpu-hover=false"
+      :tooltip "${cpu-tooltip}"
+      (box :class "stat cpu ${cpu-hover ? 'hover' : ''}" :spacing 5
+        (label :text " ")
+        (label :text "${round(EWW_CPU.avg, 0)}%")
+      )
+    )
+    (eventbox
+      :onhover "${EWW_CMD} update ram-hover=true"
+      :onhoverlost "${EWW_CMD} update ram-hover=false"
+      :tooltip "RAM: ${round(EWW_RAM.used_mem / 1073741824, 1)}GB / ${round(EWW_RAM.total_mem / 1073741824, 1)}GB"
+      (box :class "stat ram ${ram-hover ? 'hover' : ''}" :spacing 5
+        (label :text "\\uefc5 ")
+        (label :text "${round(EWW_RAM.used_mem_perc, 0)}%")
+      )
+    )
+    (eventbox
+      :onhover "${EWW_CMD} update disk-hover=true"
+      :onhoverlost "${EWW_CMD} update disk-hover=false"
+      :tooltip "Disk: ${round((EWW_DISK['/'].total - EWW_DISK['/'].free) / 1073741824, 1)}GB / ${round(EWW_DISK['/'].total / 1073741824, 1)}GB"
+      (box :class "stat disk ${disk-hover ? 'hover' : ''}" :spacing 5
+        (label :text "󰋊 ")
+        (label :text "${round((1 - (EWW_DISK['/'].free / EWW_DISK['/'].total)
+            ) * 100, 0)}%")
+      )
+    )
+  )
+)
+
+(defwidget workspaces []
+  (box :class "workspaces"
+    :orientation "h"
+    :space-evenly false
+    :halign "start"
+    :spacing 10
+    (for ws in {workspace-data.workspaces}
+      (button :class "${ws == workspace-data.active ? 'workspace-active' : ''}"
+        :onclick "hyprctl dispatch workspace ${ws}"
+      ws)
+    )
+  )
+)
+
+(defwidget active-window-title []
+  (box :class "active-window"
+    :visible {active-window != ""}
+    (label :text active-window :limit-width 40)
+  )
+)
+
+
+;; ============ CENTER WIDGETS ============
+(defwidget center-widgets []
+  (box :orientation "h" :space-evenly false :halign "center" :spacing 10
+    (caffeine)
+    (time)
+    (dnd-widget)
+  )
+)
+
+(defwidget caffeine []
+  (eventbox
+    :onclick "scripts/caffeine.lua toggle"
+    :onhover "${EWW_CMD} update caffeine-hover=true"
+    :onhoverlost "${EWW_CMD} update caffeine-hover=false"
+    (box :class "caffeine ${caffeine-status == 'true' ? 'active' : ''} ${caffeine-hover ? 'hover' : ''}"
+      (label :text "\\uf0e7")
+    )
+  )
+)
+
+(defwidget time []
+  (eventbox
+    :onclick "${EWW_CMD} update time-format-alt=${!time-format-alt}"
+    :onhover "scripts/calendar-hover.lua enter & ${EWW_CMD} update time-hover=true"
+    :onhoverlost "scripts/calendar-hover.lua leave & ${EWW_CMD} update time-hover=false"
+    (box :class "time-widget ${time-hover ? 'hover' : ''}"
+      :orientation "h"
+      :space-evenly false
+      :halign "center"
+      (label :markup "${time-format-alt ? time-alt : time-default}")
+    )
+  )
+)
+
+(defwidget dnd-widget []
+  (eventbox
+    :onclick "swaync-client -d &"
+    :onhover "${EWW_CMD} update dnd-hover=true"
+    :onhoverlost "${EWW_CMD} update dnd-hover=false"
+    (box :class "dnd ${dnd.status == 'on' ? 'active' : ''} ${dnd-hover ? 'hover' : ''}"
+      (label :text "${dnd.icon}")
+    )
+  )
+)
+
+(defwidget calendar-widget []
+  (eventbox
+    :onhover "scripts/calendar-hover.lua cancel-close"
+    :onhoverlost "scripts/calendar-hover.lua leave"
+    (box :class "calendar-popup"
+      (calendar :class "calendar"
+        :show-heading true
+      :show-day-names true)
+    )
+  )
+)
+
+
+;; ============ RIGHT WIDGETS ============
+(defwidget right-widgets []
+  (box :orientation "h" :space-evenly false :halign "end" :spacing 10
+    (network-widget)
+    (audio-widget)
+    (sys-controls)
+    (power-widget)
+  )
+)
+; ... (network-widget definition omitted, it's before sys-controls usually) ...
+
+(defwidget network-widget []
+  (eventbox
+    :onhover "${EWW_CMD} update network-hover=true"
+    :onhoverlost "${EWW_CMD} update network-hover=false"
+    :tooltip "${network.iface}: ${network.ip}"
+    (box :class "network ${network-hover ? 'hover' : ''}" :space-evenly true :spacing 10
+      (box :visible {network.status == "connected"} :space-evenly false :spacing 10
+        (box :class "net-stat down" :space-evenly false :spacing 3
+          (label :text "\\uf175")
+          (label :text "${network.down}" :halign "end" :hexpand true)
+        )
+        (box :class "net-stat up" :space-evenly false :spacing 3
+          (label :text "\\uf176")
+          (label :text "${network.up}" :halign "end" :hexpand true)
+        )
+      )
+      (label :visible {network.status == "disconnected"} :text "󰅛 Disconnected" :class "net-offline" :halign "center")
+    )
+  )
+)
+
+(defwidget audio-widget []
+  (box :class "audio-controls" :orientation "h" :space-evenly false
+    (eventbox
+      :onclick "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+      :onrightclick "hyprctl dispatch exec '[float; pin; size 800 600; center]' pavucontrol"
+      :onscroll "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ $([ '{}' = 'up' ] && echo '1%+' || echo '1%-')"
+      :onhover "${EWW_CMD} update audio-output-hover=true"
+      :onhoverlost "${EWW_CMD} update audio-output-hover=false"
+      (box :class "ctrl output ${audio-output.muted ? 'muted' : ''} ${audio-output-hover ? 'hover' : ''}" :spacing -4
+        (label :text "${audio-output.muted ? '\\ueee8 ' : '\\uf028 '}" :halign "start")
+        (label :text "${audio-output.volume}%" :halign "end")
+      )
+    )
+    (eventbox
+      :onclick "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+      :onrightclick "hyprctl dispatch exec '[float; pin; size 800 600; center]' 'pavucontrol -t 4'"
+      :onscroll "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SOURCE@ $([ '{}' = 'up' ] && echo '1%+' || echo '1%-')"
+      :onhover "${EWW_CMD} update audio-input-hover=true"
+      :onhoverlost "${EWW_CMD} update audio-input-hover=false"
+      (box :class "ctrl input ${audio-input.muted ? 'muted' : ''} ${audio-input-hover ? 'hover' : ''}" :spacing -4
+        (label :text "${audio-input.muted ? '\\uf131 ' : '\\uf130 '}" :halign "start")
+        (label :text "${audio-input.volume}%" :halign "end")
+      )
+    )
+  )
+)
+
+(defwidget sys-controls []
+  (box :class "sys-controls" :orientation "h" :space-evenly false :halign "end"
+    (button :class "ctrl screenshot" :onclick "scripts/screenshot.lua full &" :onrightclick "scripts/screenshot.lua region &" :onmiddleclick "scripts/screenshot.lua open &" " ")
+    (button :class "ctrl colorpicker" :onclick "scripts/colorpicker.lua pick &" "󰈊")
+    (button :class "ctrl net-launcher" :onclick "${EWW_CMD} open --toggle network-menu" (image :path wifi-icon-path :image-width 24 :image-height 24)
+)
+  )
+)
+
+(defwidget power-widget []
+  (eventbox
+    :onhover "${EWW_CMD} update power-hover=true"
+    :onhoverlost "${EWW_CMD} update power-hover=false"
+    :onclick "wlogout &"
+    (box :class "power-widget ${power-hover ? 'hover' : ''}"
+      (label :text "")
+    )
+  )
+)
+
+
+;; ============ UTILS ============
+(defwidget metric [label value onchange]
+  (box :orientation "h"
+    :class "metric"
+    :space-evenly false
+    (box :class "label" label)
+    (scale :min 0
+      :max 101
+      :active {onchange != ""}
+      :value value
+    :onchange onchange)
+  )
+)

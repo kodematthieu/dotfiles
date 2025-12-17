@@ -1,0 +1,260 @@
+// ============ LEFT WIDGETS ============
+
+// Sys Stats
+.sys-stats {
+    background-color: $base;
+    border-radius: 15px;
+    margin-left: 10px;
+    color: $text;
+
+    .stat {
+        color: $text;
+        min-width: 52.5px;
+        padding: 1px 5px 1px 0;
+
+        &.hover {
+            background-color: $surface0;
+        }
+
+        label:first-child {
+            margin-left: 7.5px;
+        }
+    }
+
+    .cpu {
+        border-radius: 50px 0 0 50px;
+    }
+
+    .disk {
+        border-radius: 0 50px 50px 0;
+    }
+}
+
+// Workspaces
+.workspaces {
+    background-color: $base;
+    border-radius: 15px;
+
+    button {
+        background-color: $surface0;
+        color: $text;
+        border-radius: 50px;
+        min-width: 30px;
+        min-height: 30px;
+
+        &:hover {
+            background-color: $surface1;
+        }
+
+        &.workspace-active {
+            background-color: $blue;
+            color: $base;
+        }
+    }
+}
+
+// Active Window
+.active-window {
+    background-color: $base;
+    color: $overlay0;
+    border-radius: 15px;
+    padding: 2px 12px;
+}
+
+// ============ CENTER WIDGETS ============
+
+// Caffeine
+.caffeine {
+    background-color: $base;
+    color: $overlay0;
+    border-radius: 15px;
+    min-width: 30px;
+    min-height: 30px;
+
+    &.active {
+        color: $yellow;
+    }
+
+    &.hover {
+        background-color: $surface0;
+    }
+}
+
+
+// Time
+.time-widget {
+    background-color: $base;
+    color: $text;
+    border-radius: 15px;
+    padding: 2px 12.5px;
+    font-weight: 500;
+
+    &.hover {
+        background-color: $surface0;
+        color: $mauve;
+    }
+}
+
+// DND
+.dnd {
+    background-color: $base;
+    color: $overlay0;
+    border-radius: 15px;
+    min-width: 30px;
+    min-height: 30px;
+
+    &.active {
+        color: $red;
+    }
+
+    &.hover {
+        background-color: $surface0;
+    }
+}
+
+// ============ RIGHT WIDGETS ============
+
+// Network
+.network {
+    background-color: $base;
+    color: $text;
+    border-radius: 15px;
+    padding: 2px 12px;
+    min-width: 108px;
+
+    &.hover {
+        background-color: $surface0;
+    }
+
+    .net-stat {
+        font-family: "JetBrainsMono Nerd Font";
+        min-width: 50px;
+
+        &.down {
+            color: $teal;
+        }
+
+        &.up {
+            color: $blue;
+        }
+    }
+
+    .net-offline {
+        color: $red;
+        font-family: "JetBrainsMono Nerd Font";
+        font-weight: 500;
+    }
+}
+
+// Sys Controls (Volume, Launcher)
+// Audio Widget (Volume + Mic pill)
+.audio-controls {
+    background-color: $base;
+    border-radius: 50px; // Fully rounded pill
+    color: $text;
+
+    .output {
+        background-color: transparent;
+        border-radius: 50px 0 0 50px;
+        padding: 2.5px 5px 2.5px 5px;
+        min-width: 56px;
+
+        label:first-child {
+            margin-left: 5px;
+        }
+
+        &.hover {
+            background-color: $surface0;
+        }
+    }
+
+    .input {
+        background-color: transparent;
+        border-radius: 0 50px 50px 0; // Rounded right side
+        padding: 2.5px 10px 2.5px 0;
+        min-width: 56px;
+
+        label:first-child {
+            margin-left: 10px;
+        }
+
+        &.hover {
+            background-color: $surface0;
+        }
+
+        &.muted label:first-child {
+            margin-left: 7.5px;
+        }
+    }
+}
+
+// Sys Controls (Launcher Buttons)
+.sys-controls {
+    background-color: $base;
+    border-radius: 15px; // Reduced radius for square-ish buttons
+    color: $text;
+
+    .ctrl {
+        color: $text;
+        padding: 2.5px 0; // Generic padding
+        min-height: 27px;
+        min-width: 27px;
+
+        &:hover {
+            background-color: $surface0;
+        }
+    }
+
+    // Screenshot
+    .screenshot {
+        border-radius: 50px 0 0 50px;
+
+        padding-left: 7.5px;
+
+        label {
+            font-size: 14px;
+        }
+    }
+
+    // Color Picker
+    .colorpicker {
+        border-radius: 0;
+
+        padding-right: 2.5px;
+
+        label {
+            font-size: 14px;
+        }
+
+        &:hover {
+            background-color: $surface0;
+        }
+    }
+
+    // Network Launcher specific
+    .net-launcher {
+        padding-right: 7.5px;
+
+        border-radius: 0 50px 50px 0;
+    }
+
+}
+
+// Power Widget
+.power-widget {
+    background-color: $surface0;
+    color: $red;
+    border-radius: 50px;
+    min-height: 30px;
+    min-width: 30px;
+    margin-right: 10px;
+
+    &.hover {
+        background-color: $surface1;
+    }
+
+    label {
+        padding-right: 3px;
+        font-size: 16px;
+    }
+}
