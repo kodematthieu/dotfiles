@@ -1,28 +1,38 @@
 #!/usr/bin/env bash
 
-# 1. Kill ALL the processes
-# We use -q (quiet) so it doesn't complain if something isn't running
-killall -q eww
-killall -q swaync
-killall -q hyprpaper
-killall -q hypridle
-killall -q hyprpolkitagent
-killall -q wl-paste  # <--- Kills the clipboard watchers
+# 1. Start Services
+# We run them in the background (&) so the script doesn't block.
 
-# 2. Wait for them to die properly
-# This prevents "race conditions" where we try to start a new one 
-# before the old one is fully gone.
-sleep 0.5
+# Service Manager / Bar
+if ! pgrep -x eww >/dev/null; then
+    eww daemon && eww open bar &
+fi
 
-# 3. Start them again
-eww daemon && eww open bar &
-swaync &
-hyprpaper &
-hypridle &
+# Notification Daemon
+if ! pgrep -x swaync >/dev/null; then
+    swaync &
+fi
+
+# Wallpaper
+if ! pgrep -x hyprpaper >/dev/null; then
+    hyprpaper &
+fi
+
+# Idle Daemon
+if ! pgrep -x hypridle >/dev/null; then
+    nohup hypridle > /dev/null 2>&1 &
+fi
+
+# Polkit Agent
+# Systemd manages this, so we just ensure it's running/restarted if needed, 
+# but for a pure "autostart" we might just want to start it if missing.
+# However, restarting systemd service is usually safe/idempotent.
 systemctl --user restart hyprpolkitagent
 
-# Restart Clipboard Watchers
-wl-paste --type text --watch cliphist store &
-wl-paste --type image --watch cliphist store &
-
-notify-send "System" "All Desktop Services Reloaded"
+# Clipboard Watchers
+if ! pgrep -f "wl-paste --type text" >/dev/null; then
+    wl-paste --type text --watch cliphist store &
+fi
+if ! pgrep -f "wl-paste --type image" >/dev/null; then
+    wl-paste --type image --watch cliphist store &
+fi
