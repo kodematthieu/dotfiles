@@ -57,6 +57,8 @@ pavucontrol      # GUI mixer (eww/widgets.yuck)
 ttf-jetbrains-mono-nerd  # Monospace font (eww, kitty)
 ttf-rubik                # UI font (eww, hyprlock)
 
+# --- Appearance & Themes ---
+bibata-cursor-theme      # System-wide cursor (Hyprland env, GTK settings)
+
 # --- Runtimes (installed via curl, see install script) ---
 # bun            # curl -fsSL https://bun.com/install | bash
-# uv             # curl -LsSf https://astral.sh/uv/install.sh | sh
