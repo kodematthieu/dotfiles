@@ -5,7 +5,7 @@ neovim           # Text editor
 git              # Version control
 
 # --- Browsers ---
-helium-browser   # Web browser (hyprland.conf: $webBrowser)
+helium-browser-bin   # Web browser (hyprland.conf: $webBrowser)
 
 # --- Shell ---
 fish             # Shell (~/.config/fish)
@@ -16,7 +16,7 @@ zoxide           # Smart cd (fish/conf.d/shell.fish)
 
 # --- Display Manager ---
 greetd           # Display manager daemon
-regreet          # GTK4 greeter
+greetd-regreet   # GTK4 greeter
 cage             # Wayland compositor for greeter
 
 # --- Desktop Environment (Hyprland) ---
