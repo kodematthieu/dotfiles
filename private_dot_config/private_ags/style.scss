@@ -1,0 +1,14 @@
+@use 'scss/variables' as *;
+@use 'scss/bar';
+
+* {
+  all: unset;
+}
+
+tooltip {
+  background-color: rgba($base, 0.9);
+  color: $text;
+  border-radius: 10px;
+  border: 1px solid $surface0;
+  padding: 6px 10px;
+}

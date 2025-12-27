@@ -4,8 +4,8 @@
 # We run them in the background (&) so the script doesn't block.
 
 # Service Manager / Bar
-if ! pgrep -x eww >/dev/null; then
-    eww daemon && eww open bar &
+if ! pgrep -x ags >/dev/null; then
+    ags run &
 fi
 
 # Notification Daemon

@@ -1,0 +1,402 @@
+@use 'variables' as *;
+
+window.bar {
+    background: transparent;
+    color: $text;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+
+    >* {
+        font-size: 12px;
+    }
+
+    #centerbox {
+        background: transparent;
+    }
+
+    .island {
+        background-color: $base;
+        color: $overlay0;
+        border-radius: 15px;
+        padding: 0 10px;
+        min-width: 25px;
+        min-height: 25px;
+    }
+
+
+    .sysinfo {
+        padding: 0;
+
+        .sys-item {
+            padding: 0 5px;
+
+            min-width: 45px;
+
+            .icon {
+                color: $overlay0;
+                margin-right: 2px;
+                font-size: 14px;
+                -gtk-icon-size: 14px;
+            }
+
+            label {
+                margin-right: 0;
+            }
+
+            &:first-child {
+                border-radius: 15px 0 0 15px;
+                padding-left: 7.5px;
+            }
+
+            &:last-child {
+                border-radius: 0 15px 15px 0;
+                padding-right: 7.5px;
+            }
+
+            &:hover {
+                background-color: $surface0;
+                color: $text;
+            }
+
+            // Icon colors per sys-item type
+            &.cpu .icon {
+                color: $blue;
+            }
+
+            &.gpu .icon {
+                color: $mauve;
+            }
+
+            &.ram .icon {
+                color: $green;
+            }
+
+            &.storage .icon {
+                color: $yellow;
+            }
+
+            &.temp .icon {
+                color: $red;
+            }
+
+            // Temperature severity colors
+            &.temp label {
+                &.cool {
+                    color: color-mix(in srgb, $green 50%, $overlay0 50%);
+                }
+
+                &.warm {
+                    color: color-mix(in srgb, $yellow 50%, $overlay0 50%);
+                }
+
+                &.hot {
+                    color: color-mix(in srgb, $red 50%, $overlay0 50%);
+                }
+            }
+        }
+    }
+
+    .workspaces {
+        padding: 0;
+        border-radius: 15px;
+
+        button {
+            border-radius: 15px;
+            padding: 0 8px;
+            color: $overlay0;
+            background: $surface0;
+            min-width: 10px;
+            min-height: 10px;
+
+            &:hover {
+                background-color: $surface1;
+                color: $text;
+            }
+
+            &.active {
+                color: $base;
+                background-color: $blue;
+            }
+
+            &.active:hover {
+                background-color: $mauve;
+            }
+        }
+    }
+
+    .active-window {
+        padding: 0 12px;
+        color: $text;
+
+        .app-icon {
+            color: $mauve;
+            -gtk-icon-size: 16px;
+        }
+
+        .title {
+            font-weight: 500;
+        }
+
+        .placeholder {
+            color: $overlay0;
+            font-style: italic;
+        }
+    }
+
+    // Caffeine widget (matches eww .caffeine)
+    .caffeine {
+        @extend .island;
+        padding: 0; // Square button fix
+
+        &.active {
+            color: $yellow;
+        }
+
+        &:hover {
+            background-color: $surface0;
+        }
+    }
+
+    // Time widget (matches eww .time-widget)
+    .time {
+        @extend .island;
+        font-weight: 500;
+
+        >button {
+            background-color: transparent;
+        }
+
+        &:hover {
+            background-color: $surface0;
+            color: $text;
+        }
+    }
+
+
+    // DND widget (matches eww .dnd)
+    .dnd {
+        @extend .island;
+        padding: 0; // Square button fix
+
+        &.active {
+            color: $red;
+        }
+
+        &:hover {
+            background-color: $surface0;
+        }
+    }
+
+    .calendar {
+        color: $text;
+        background: linear-gradient(to bottom right, rgba($base-light, 0.8), rgba($base, 0.8));
+        border-radius: 15px;
+        padding: 10px;
+        border: 2px solid $base-light;
+
+        >header {
+            font-weight: bold;
+            padding: 10px 0;
+
+            label {
+                color: $mauve;
+            }
+        }
+
+        >grid>label {
+            padding: 4px 2px;
+            border-radius: 5px;
+
+            &.day-name {
+                color: $lavender;
+                text-transform: uppercase;
+                border-bottom: 1px solid $overlay0;
+                border-radius: 0;
+                margin-bottom: 5px;
+            }
+
+            &.today {
+                text-decoration: underline;
+                color: $blue;
+                border: 2px dashed $blue;
+            }
+
+            &:selected {
+                background-color: $blue;
+                color: $base;
+            }
+
+            &.other-month {
+                color: color-mix(in srgb, $base 50%, $overlay0 50%);
+            }
+        }
+    }
+
+    .power {
+        @extend .island;
+        padding: 0; // Square button fix
+        background-color: $surface0;
+        border: 1px solid $surface1;
+        
+        button {
+            padding: 5px 6px;
+            border-radius: inherit;
+            image {
+                color: $red;
+                -gtk-icon-size: 14px;
+            }
+
+            &:hover {
+                background-color: $surface1;
+            }
+        }
+    }
+
+    .utilities {
+        padding: 0;
+
+        .util-item {
+            padding: 0 8px;
+
+            image {
+                -gtk-icon-size: 14px;
+            }
+
+            &:first-child {
+                border-radius: 15px 0 0 15px;
+                padding-left: 10px;
+            }
+
+            &:last-child {
+                border-radius: 0 15px 15px 0;
+                padding-right: 10px;
+            }
+
+            &:hover {
+                background-color: $surface0;
+            }
+
+            // Per-button colors
+            &.screenshot image {
+                color: $teal;
+            }
+
+            &.colorpicker image {
+                color: $mauve;
+            }
+
+            &.clipboard image {
+                color: $green;
+            }
+
+            &.keybinds image {
+                color: $yellow;
+            }
+        }
+    }
+
+    .audio {
+        padding: 0;
+
+        .audio-item {
+            padding: 0 5px;
+            min-width: 50px;
+
+            image {
+                color: $overlay0;
+                margin-right: 2px;
+                -gtk-icon-size: 14px;
+            }
+
+            label {
+                margin-right: 0;
+            }
+
+            &:first-child {
+                border-radius: 15px 0 0 15px;
+                padding-left: 7.5px;
+            }
+
+            &:last-child {
+                border-radius: 0 15px 15px 0;
+                padding-right: 7.5px;
+            }
+
+            &:hover {
+                background-color: $surface0;
+                color: $text;
+            }
+
+            // Speaker colors
+            &.speaker image { color: $blue; }
+            &.speaker.muted image { color: $red; }
+
+            // Microphone colors
+            &.mic image { color: $green; }
+            &.mic.muted image { color: $red; }
+        }
+    }
+
+    .network {
+        padding: 0;
+
+        .speed-monitor {
+            border-radius: 15px 0 0 15px;
+            
+            &:hover {
+                background-color: $surface0;
+            }
+
+            .speed-item {
+                padding: 0 5px;
+                min-width: 55px;
+
+                image {
+                    color: $overlay0;
+                    margin-right: 2px;
+                    -gtk-icon-size: 14px;
+                }
+
+                label {
+                    margin-right: 0;
+                }
+
+                &:first-child {
+                    padding-left: 7.5px;
+                }
+
+                &.down image { color: $green; }
+                &.up image { color: $mauve; }
+            }
+        }
+
+        .network-status {
+            padding: 0 8px;
+            border-radius: 0 15px 15px 0;
+
+            image {
+                -gtk-icon-size: 14px;
+                color: $overlay0;
+            }
+
+            &.connected image { color: $blue; }
+            &.disconnected image { color: $red; }
+
+            &:hover {
+                background-color: $surface0;
+            }
+        }
+    }
+}
+
+// Tooltip styling (matches calendar container)
+tooltip {
+    margin-top: 5px;
+    background: linear-gradient(to bottom right, rgba($base-light, 0.95), rgba($base, 0.95));
+    border-radius: 10px;
+    padding: 8px 12px;
+    border: 1px solid $surface0;
+    color: $text;
+    font-size: 11px;
+}

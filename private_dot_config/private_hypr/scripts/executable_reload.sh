@@ -5,9 +5,9 @@
 # then calls autostart.sh to launch them again.
 
 # 1. Smart Reload (IPC-based)
-# Eww: Reloads configuration and CSS
-if pgrep -x eww >/dev/null; then
-    eww reload
+# AGS: Graceful exit (it will be restarted by autostart.sh)
+if pgrep -x ags >/dev/null; then
+    ags quit
 fi
 
 # SwayNC: Reloads config and CSS

@@ -51,6 +51,7 @@ satty            # Screenshot annotation (eww/screenshot.lua)
 # --- Audio ---
 playerctl        # Media control (keybindings.conf)
 wireplumber      # Session manager
+rtkit            # Realtime scheduling for PipeWire
 pavucontrol      # GUI mixer (eww/widgets.yuck)
 
 # --- Fonts ---
@@ -58,6 +59,9 @@ ttf-jetbrains-mono-nerd  # Monospace font (eww, kitty)
 ttf-rubik                # UI font (eww, hyprlock)
 
 # --- Appearance & Themes ---
+aylurs-gtk-shell         # Widget system (replacing eww)
+dart-sass                # SCSS compiler (needed by ags)
+libastal-meta            # Astal libraries and meta package
 bibata-cursor-theme      # System-wide cursor (Hyprland env, GTK settings)
 
 # --- Runtimes (installed via curl, see install script) ---
