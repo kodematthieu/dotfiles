@@ -3,9 +3,9 @@ import { exec, execAsync } from "ags/process"
 import { createPoll } from "ags/time"
 import { readFile } from "ags/file"
 import { With, createState } from "gnim"
-import Network from "gi://AstalNetwork"
+import AstalNetwork from "gi://AstalNetwork"
 
-const network = Network.get_default()
+const network = AstalNetwork.get_default()
 
 // ─── Speed Monitor ───────────────────────────────────────────────────────────
 interface SpeedData {
@@ -112,9 +112,9 @@ function getNetworkSpeed(): SpeedData {
 }
 
 // ─── WiFi Icon Mapping ───────────────────────────────────────────────────────
-function getWifiIcon(strength: number, state: Network.DeviceState): string {
-    if (state === Network.DeviceState.DISCONNECTED) return "wifi-off-symbolic"
-    if (state === Network.DeviceState.PREPARE || state === Network.DeviceState.CONFIG) return "wifi-sync-symbolic"
+function getWifiIcon(strength: number, state: AstalNetwork.DeviceState): string {
+    if (state === AstalNetwork.DeviceState.DISCONNECTED) return "wifi-off-symbolic"
+    if (state === AstalNetwork.DeviceState.PREPARE || state === AstalNetwork.DeviceState.CONFIG) return "wifi-sync-symbolic"
     
     if (strength <= 25) return "wifi-s1-symbolic"
     if (strength <= 50) return "wifi-s2-symbolic"
@@ -171,16 +171,16 @@ function NetworkStatus() {
     const [tooltip, setTooltip] = createState("Disconnected")
     const [connected, setConnected] = createState(false)
 
-    const updateStatus = () => {
+        const updateStatus = () => {
         // Check WiFi first
         if (wifi && wifi.enabled) {
             const strength = wifi.strength ?? 0
-            const state = wifi.state ?? Network.DeviceState.DISCONNECTED
+            const state = wifi.state ?? AstalNetwork.DeviceState.DISCONNECTED
             const ssid = wifi.ssid ?? "Unknown"
             
             setIcon(getWifiIcon(strength, state))
-            setConnected(state === Network.DeviceState.ACTIVATED)
-            setTooltip(state === Network.DeviceState.ACTIVATED 
+            setConnected(state === AstalNetwork.DeviceState.ACTIVATED)
+            setTooltip(state === AstalNetwork.DeviceState.ACTIVATED 
                 ? `${ssid} (${strength}%)` 
                 : "WiFi Disconnected")
             return
@@ -188,8 +188,8 @@ function NetworkStatus() {
 
         // Check Wired
         if (wired) {
-            const state = wired.state ?? Network.DeviceState.DISCONNECTED
-            if (state === Network.DeviceState.ACTIVATED) {
+            const state = wired.state ?? AstalNetwork.DeviceState.DISCONNECTED
+            if (state === AstalNetwork.DeviceState.ACTIVATED) {
                 setIcon("network-symbolic")
                 setConnected(true)
                 setTooltip("Ethernet Connected")
@@ -231,9 +231,9 @@ function NetworkStatus() {
 }
 
 // ─── Network Island ──────────────────────────────────────────────────────────
-export default function BarNetwork() {
+export default function Network() {
     return (
-        <box class="network island">
+        <box class="network">
             <SpeedMonitor />
             <NetworkStatus />
         </box>

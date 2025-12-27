@@ -6,7 +6,7 @@ import { execAsync, subprocess } from "ags/process";
 const ICON_DND_OFF = "󰂚";  // Notifications enabled
 const ICON_DND_ON = "󰂜";   // Do Not Disturb enabled
 
-export default function BarDND() {
+export default function DND() {
     const [dndOn, setDndOn] = createState(false);
     const [icon, setIcon] = createState(ICON_DND_OFF);
 

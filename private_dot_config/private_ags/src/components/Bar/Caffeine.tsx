@@ -12,7 +12,7 @@ function isHypridleRunning(): boolean {
     }
 }
 
-export default function BarCaffeine() {
+export default function Caffeine() {
     // Caffeine ON = hypridle NOT running
     const [caffeineOn, setCaffeineOn] = createState(!isHypridleRunning());
 

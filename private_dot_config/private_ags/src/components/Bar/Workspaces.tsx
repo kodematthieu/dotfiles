@@ -2,7 +2,7 @@ import { Gtk } from "ags/gtk4"
 import Hyprland from "gi://AstalHyprland"
 import { With, createState, createComputed } from "gnim"
 
-export default function BarWorkspaces() {
+export default function Workspaces() {
     const hypr = Hyprland.get_default()
     const [focused, setFocused] = createState(hypr.get_focused_workspace())
     const [workspaces, setWorkspaces] = createState(hypr.get_workspaces())
@@ -46,7 +46,7 @@ export default function BarWorkspaces() {
     })
 
     return (
-        <box class="workspaces island">
+        <box class="workspaces">
             <With value={workspacesData}>
                 {({ list, focusedId }) => (
                     <box spacing={8}

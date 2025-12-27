@@ -43,9 +43,9 @@ function showKeybinds() {
 }
 
 // ─── Widget ──────────────────────────────────────────────────────────────────
-export default function BarUtilities() {
+export default function Utilities() {
     return (
-        <box class="utilities island" spacing={4}>
+        <box class="utilities" spacing={4}>
             {/* Screenshot: L=full, R=region, M=open dir */}
             <button
                 class="util-item screenshot"

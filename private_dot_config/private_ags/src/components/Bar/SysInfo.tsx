@@ -153,9 +153,9 @@ export const temps = createPoll(getTemperatures(), 2000, getTemperatures);
 export const storage = createPoll(getStorageUsage(), 10000, getStorageUsage);
 
 // ─── Widget ──────────────────────────────────────────────────────────────────
-export default function BarSysInfo() {
+export default function SysInfo() {
     return (
-        <box class="sysinfo island">
+        <box class="sysinfo">
             <box
                 class="sys-item cpu"
                 tooltipMarkup={cpu((v) => {

@@ -59,7 +59,7 @@ function formatTime(date: Date, alt: boolean): string {
     }
 }
 
-export default function BarTime() {
+export default function Time() {
     const time = createPoll(new Date(), 1000, () => new Date());
     const [altMode, setAltMode] = createState(fileExists(TIME_ALT_MODE_FILE));
 

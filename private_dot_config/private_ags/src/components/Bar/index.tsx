@@ -1,15 +1,15 @@
 import app from "ags/gtk4/app"
 import { Astal, Gtk, Gdk } from "ags/gtk4"
-import BarTime from "./BarTime"
-import BarCaffeine from "./BarCaffeine"
-import BarDND from "./BarDND"
-import BarSysInfo from "./BarSysInfo"
-import BarWorkspaces from "./BarWorkspaces"
+import Time from "./Time"
+import Caffeine from "./Caffeine"
+import DND from "./DND"
+import SysInfo from "./SysInfo"
+import Workspaces from "./Workspaces"
 
-import BarPower from "./BarPower"
-import BarUtilities from "./BarUtilities"
-import BarAudio from "./BarAudio"
-import BarNetwork from "./BarNetwork"
+import Power from "./Power"
+import Utilities from "./Utilities"
+import Audio from "./Audio"
+import Network from "./Network"
 
 export default function Bar(gdkmonitor: Gdk.Monitor) {
   const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
@@ -28,22 +28,22 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         {/* Base layer: left and right content */}
         <box hexpand={true}>
           <box halign={Gtk.Align.START} hexpand={true} spacing={10}>
-            <BarSysInfo />
-            <BarWorkspaces />
+            <SysInfo />
+            <Workspaces />
           </box>
           <box halign={Gtk.Align.END} hexpand={true} spacing={10}>
-            <BarNetwork />
-            <BarAudio />
-            <BarUtilities />
-            <BarPower />
+            <Network />
+            <Audio />
+            <Utilities />
+            <Power />
           </box>
         </box>
 
         {/* Overlay layer: true centered content */}
         <box $type="overlay" halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} spacing={10}>
-          <BarCaffeine />
-          <BarTime />
-          <BarDND />
+          <Caffeine />
+          <Time />
+          <DND />
         </box>
       </overlay>
     </window>

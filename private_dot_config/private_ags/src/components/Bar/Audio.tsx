@@ -159,9 +159,9 @@ function Microphone() {
 }
 
 // ─── Audio Island ────────────────────────────────────────────────────────────
-export default function BarAudio() {
+export default function Audio() {
     return (
-        <box class="audio island" spacing={4}>
+        <box class="audio" spacing={4}>
             <Speaker />
             <Microphone />
         </box>
