@@ -28,6 +28,7 @@ window.bar {
         .sys-item {
             padding: 0 5px;
             min-width: 45px;
+            transition: background-color 0.2s ease;
 
             .icon {
                 color: $overlay0;
@@ -99,6 +100,7 @@ window.bar {
             background: $surface0;
             min-width: 10px;
             min-height: 10px;
+            transition: background-color 0.2s ease, color 0.2s ease;
 
             &:hover {
                 background-color: $surface1;
@@ -116,30 +118,12 @@ window.bar {
         }
     }
 
-    .active-window {
-        padding: 0 12px;
-        color: $text;
-
-        .app-icon {
-            color: $mauve;
-            -gtk-icon-size: 16px;
-        }
-
-        .title {
-            font-weight: 500;
-        }
-
-        .placeholder {
-            color: $overlay0;
-            font-style: italic;
-        }
-    }
-
     // ─── Center Modules ───
 
     .caffeine {
         @include island;
         padding: 0;
+        transition: background-color 0.2s ease;
 
         &.active {
             color: $yellow;
@@ -153,9 +137,12 @@ window.bar {
     .time {
         @include island;
         font-weight: 500;
+        transition: background-color 0.2s ease;
+        padding: 0;
 
         > button {
-            background-color: transparent;
+            border-radius: 15px;
+            padding: 0 10px;
         }
 
         &:hover {
@@ -167,6 +154,7 @@ window.bar {
     .dnd {
         @include island;
         padding: 0;
+        transition: background-color 0.2s ease;
 
         &.active {
             color: $red;
@@ -185,6 +173,7 @@ window.bar {
 
         .speed-monitor {
             border-radius: 15px 0 0 15px;
+            transition: background-color 0.2s ease;
 
             &:hover {
                 background-color: $surface0;
@@ -220,6 +209,7 @@ window.bar {
         .network-status {
             padding: 0 8px;
             border-radius: 0 15px 15px 0;
+            transition: background-color 0.2s ease;
 
             image {
                 -gtk-icon-size: 14px;
@@ -246,6 +236,7 @@ window.bar {
         .audio-item {
             padding: 0 5px;
             min-width: 50px;
+            transition: background-color 0.2s ease;
 
             image {
                 color: $overlay0;
@@ -296,6 +287,7 @@ window.bar {
 
         .util-item {
             padding: 0 8px;
+            transition: background-color 0.2s ease;
 
             image {
                 -gtk-icon-size: 14px;
@@ -340,6 +332,8 @@ window.bar {
         button {
             padding: 5px 6px;
             border-radius: inherit;
+            transition: background-color 0.2s ease;
+
             image {
                 color: $red;
                 -gtk-icon-size: 14px;
