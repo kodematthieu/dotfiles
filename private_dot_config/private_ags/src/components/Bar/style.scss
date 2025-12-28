@@ -2,6 +2,17 @@
 
 
 window.bar {
+    @keyframes spin {
+        to { -gtk-icon-transform: rotate(1turn); }
+    }
+
+    .spinning {
+        animation-name: spin;
+        animation-duration: 1s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+    }
+
     @mixin island {
         background-color: $base;
         color: $overlay0;
@@ -207,7 +218,6 @@ window.bar {
         }
 
         .network-status {
-            padding: 0 8px;
             border-radius: 0 15px 15px 0;
             transition: background-color 0.2s ease;
 
@@ -216,11 +226,19 @@ window.bar {
                 color: $overlay0;
             }
 
+            > button {
+                padding: 0 8px;
+                border-radius: 0 15px 15px 0;
+            }
+
             &.connected image {
                 color: $blue;
             }
             &.disconnected image {
                 color: $red;
+            }
+            &.disabled image {
+                color: $yellow;
             }
 
             &:hover {
@@ -391,6 +409,113 @@ window.bar {
             }
         }
     }
+
+    .network-menu {
+        color: $text;
+        background: linear-gradient(to bottom right, rgba($base-light, 0.8), rgba($base, 0.8));
+        border-radius: 15px;
+        padding: 10px;
+        border: 2px solid $base-light;
+
+        .wifi-list {
+            .header {
+                label {
+                    color: $mauve;
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                }
+
+                switch {
+                    background-color: $surface0;
+                    border-radius: 12px;
+                    transition: background-color 0.2s ease;
+
+                    slider {
+                        min-width: 12px;
+                        min-height: 12px;
+                        margin: 2px;
+                        background-color: $text;
+                        border-radius: 12px;
+                        transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.2s ease;
+                    }
+
+                    &:checked slider {
+                        background-color: $blue;
+                    }
+
+                    &:hover {
+                        background-color: $surface1;
+
+                        &:checked slider {
+                            background-color: $mauve;
+                        }
+                    }
+                }
+
+                > button {
+                    image {
+                        transition: color 0.2s ease;
+                    }
+
+                    &:hover image {
+                        color: $mauve;
+                    }
+                }
+            }
+
+            .wifi-item {
+                padding: 8px;
+                border-radius: 10px;
+                transition: background-color 0.2s ease;
+
+                &:hover {
+                    background-color: $surface0;
+                }
+
+                image {
+                    color: $overlay0;
+                }
+
+                label {
+                    font-weight: 500;
+                }
+
+                &.active {
+                    label, image {
+                        color: $mauve;
+                    }
+                }
+            }
+        }
+
+        separator {
+            min-height: 1px;
+            background-color: $surface1;
+            margin: 5px 0;
+        }
+
+        .settings-btn {
+            background-color: $surface0;
+            color: $text;
+            border-radius: 10px;
+            padding: 8px;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background-color: $blue;
+                color: $base;
+
+                image {
+                    color: $base;
+                }
+            }
+
+            image {
+                color: $blue;
+            }
+        }
+    }
+
   // ─── Tooltips ───
   tooltip {
     margin-top: 5px;

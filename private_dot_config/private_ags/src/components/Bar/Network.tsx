@@ -2,7 +2,7 @@ import { Gtk, Gdk } from "ags/gtk4"
 import { exec, execAsync } from "ags/process"
 import { createPoll } from "ags/time"
 import { readFile } from "ags/file"
-import { With, createState } from "gnim"
+import { With, createState, createComputed } from "gnim"
 import AstalNetwork from "gi://AstalNetwork"
 
 const network = AstalNetwork.get_default()
@@ -162,28 +162,152 @@ function SpeedMonitor() {
     )
 }
 
+// ─── Network Menu ────────────────────────────────────────────────────────────
+function WifiItem({ ap }: { ap: any }) {
+    return (
+        <box class={`wifi-item ${ap.active ? "active" : ""}`} spacing={8} hexpand>
+            <image iconName={ap.iconName} />
+            <label label={ap.ssid || "Unknown"} hexpand xalign={0} />
+            {ap.statusIcon && <image iconName={ap.statusIcon} halign={Gtk.Align.END} />}
+        </box>
+    )
+}
+
+function WifiList({ wifi }: { wifi: AstalNetwork.Wifi }) {
+    const [aps, setAps] = createState(wifi.accessPoints || [])
+    const [scanning, setScanning] = createState(wifi.scanning)
+
+    wifi.connect("notify::access-points", () => setAps(wifi.accessPoints))
+    wifi.connect("notify::scanning", () => setScanning(wifi.scanning))
+    
+    const list = createComputed(() => {
+        const unique = new Map<string, any>()
+        
+        // @ts-ignore
+        const conns = network.wifi?.connections || network.connections || []
+        const known = new Set(conns.map((c: any) => c.id))
+
+        for (const ap of aps()) {
+            if (!ap.ssid) continue
+            if (!unique.has(ap.ssid) || unique.get(ap.ssid).strength < ap.strength) {
+                unique.set(ap.ssid, ap)
+            }
+        }
+
+        return Array.from(unique.values())
+            .map(ap => {
+                // @ts-ignore
+                const isSecured = (ap.flags & 1) > 0 || (ap.wpaFlags > 0) || (ap.rsnFlags > 0)
+                const isKnown = known.has(ap.ssid)
+                const isActive = wifi.activeAccessPoint?.ssid === ap.ssid
+                
+                let statusIcon = null
+                
+                if (isActive) {
+                    statusIcon = "check-symbolic"
+                } else if (isSecured) {
+                     if (isKnown) {
+                         statusIcon = "lock-open-symbolic"
+                     } else {
+                         statusIcon = "lock-symbolic"
+                     }
+                }
+                
+                return {
+                    ssid: ap.ssid,
+                    strength: ap.strength,
+                    iconName: getWifiIcon(ap.strength, AstalNetwork.DeviceState.UNKNOWN),
+                    active: isActive,
+                    statusIcon: statusIcon
+                }
+            })
+            .sort((a, b) => {
+                if (a.active && !b.active) return -1
+                if (!a.active && b.active) return 1
+                return b.strength - a.strength
+            })
+            .slice(0, 15) // Limit to top 15
+    })
+
+    const scan = () => {
+        wifi.scan()
+    }
+    
+    return (
+        <box orientation={Gtk.Orientation.VERTICAL} spacing={4} class="wifi-list">
+             <box spacing={8} class="header">
+                <label label="Wi-Fi" hexpand xalign={0} css="font-weight: bold;" />
+                <switch 
+                    valign={Gtk.Align.CENTER} 
+                    active={wifi.enabled}
+                    onStateSet={(_, state) => {
+                        wifi.set_enabled(state)
+                        return false
+                    }}
+                    onNotify={(self) => {
+                        if (self.active !== wifi.enabled) {
+                             wifi.set_enabled(self.active)
+                        }
+                    }}
+                />
+                <button onClicked={scan} tooltipText="Scan for networks">
+                    <With value={scanning}>
+                        {(s) => <image class={s ? "spinning" : ""} iconName={s ? "process-working-symbolic" : "view-refresh-symbolic"} />}
+                    </With>
+                </button>
+             </box>
+             
+             <Gtk.Separator />
+
+             <Gtk.ScrolledWindow minContentHeight={200} minContentWidth={200} hscrollbarPolicy={Gtk.PolicyType.NEVER}>
+                <With value={list}>
+                    {(items) => (
+                        <box orientation={Gtk.Orientation.VERTICAL} spacing={2}>
+                        {items.length > 0 ? items.map(ap => (
+                             <WifiItem ap={ap} />
+                        )) : <label label="No networks found" />}
+                        </box>
+                    )}
+                </With>
+             </Gtk.ScrolledWindow>
+        </box>
+    )
+}
+
+
 // ─── Network Status Widget ───────────────────────────────────────────────────
 function NetworkStatus() {
     const wifi = network.wifi
     const wired = network.wired
     
+    // Icon & Label State
     const [icon, setIcon] = createState("wifi-off-symbolic")
     const [tooltip, setTooltip] = createState("Disconnected")
-    const [connected, setConnected] = createState(false)
+    const [status, setStatus] = createState("disabled") 
 
-        const updateStatus = () => {
-        // Check WiFi first
-        if (wifi && wifi.enabled) {
-            const strength = wifi.strength ?? 0
-            const state = wifi.state ?? AstalNetwork.DeviceState.DISCONNECTED
-            const ssid = wifi.ssid ?? "Unknown"
-            
-            setIcon(getWifiIcon(strength, state))
-            setConnected(state === AstalNetwork.DeviceState.ACTIVATED)
-            setTooltip(state === AstalNetwork.DeviceState.ACTIVATED 
-                ? `${ssid} (${strength}%)` 
-                : "WiFi Disconnected")
-            return
+    const updateStatus = () => {
+        // Check WiFi
+        if (wifi) {
+             if (wifi.enabled) {
+                const strength = wifi.strength ?? 0
+                const state = wifi.state ?? AstalNetwork.DeviceState.DISCONNECTED
+                const ssid = wifi.ssid ?? "Unknown"
+                
+                setIcon(getWifiIcon(strength, state))
+                
+                if (state === AstalNetwork.DeviceState.ACTIVATED) {
+                    setStatus("connected")
+                    setTooltip(`${ssid} (${strength}%)`)
+                } else {
+                    setStatus("disconnected")
+                    setTooltip("WiFi Disconnected")
+                }
+             } else {
+                setIcon("wifi-off-symbolic")
+                setStatus("disabled")
+                setTooltip("WiFi Disabled")
+             }
+             return
         }
 
         // Check Wired
@@ -191,15 +315,15 @@ function NetworkStatus() {
             const state = wired.state ?? AstalNetwork.DeviceState.DISCONNECTED
             if (state === AstalNetwork.DeviceState.ACTIVATED) {
                 setIcon("network-symbolic")
-                setConnected(true)
+                setStatus("connected")
                 setTooltip("Ethernet Connected")
                 return
             }
         }
 
-        // Fallback: disconnected
+        // Fallback
         setIcon("wifi-off-symbolic")
-        setConnected(false)
+        setStatus("disabled")
         setTooltip("Disconnected")
     }
 
@@ -217,16 +341,36 @@ function NetworkStatus() {
         execAsync(["hyprctl", "dispatch", "exec", "[float; pin; size 800 600; center] nm-connection-editor"]).catch(() => { })
     }
 
+    const toggleWifi = () => {
+        if (wifi) {
+            wifi.set_enabled(!wifi.enabled)
+        }
+    }
+
     return (
-        <button
-            class={connected((c) => `network-status ${c ? "connected" : "disconnected"}`)}
+        <menubutton
+            class={status((s) => `network-status ${s}`)}
             tooltipText={tooltip()}
-            onClicked={openSettings}
+            halign={Gtk.Align.CENTER}
         >
+            <Gtk.GestureClick button={Gdk.BUTTON_SECONDARY} onPressed={toggleWifi} />
             <With value={icon}>
                 {(i) => <image iconName={i} />}
             </With>
-        </button>
+            
+            <popover>
+                <box orientation={Gtk.Orientation.VERTICAL} spacing={10} class="network-menu" widthRequest={250}>
+                     {wifi && <WifiList wifi={wifi} />}
+                     
+                     <button onClicked={openSettings} class="settings-btn">
+                        <box spacing={8} halign={Gtk.Align.CENTER}>
+                            <image iconName="preferences-system-network-symbolic" />
+                            <label label="Network Settings" />
+                        </box>
+                     </button>
+                </box>
+            </popover>
+        </menubutton>
     )
 }
 

@@ -1,0 +1,14 @@
+{{- if eq .chezmoi.osRelease.id "arch" -}}
+#!/bin/bash
+
+# Generate AGS type definitions (@girs/)
+AGS_DIR={{ joinPath .chezmoi.homeDir ".config/ags" | quote }}
+
+if [ -d "$AGS_DIR" ] && command -v ags &> /dev/null; then
+    echo "Generating AGS types..."
+    ags types -d "$AGS_DIR"
+else
+    echo "AGS not found or directory missing, skipping type generation"
+fi
+
+{{- end -}}
