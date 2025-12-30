@@ -31,14 +31,14 @@ function colorPicker() {
 // ─── Clipboard History ───────────────────────────────────────────────────────
 function showClipboard() {
     // Launch cliphist with rofi picker (silent on cancel)
-    execAsync(["bash", "-c", `cliphist list | rofi -dmenu -p "Clipboard" | cliphist decode | wl-copy`])
+    execAsync('rofi -show clipboard')
         .catch(() => { }) // User cancelled or empty - ignore
 }
 
 // ─── Keybind List ────────────────────────────────────────────────────────────
 function showKeybinds() {
     // Show Hyprland keybinds in a rofi menu (silent on cancel)
-    execAsync(["bash", "-c", `hyprctl binds -j | jq -r '.[] | "\\(.modmask) + \\(.key) → \\(.dispatcher) \\(.arg)"' | rofi -dmenu -p "Keybinds" -i`])
+    execAsync('rofi -show keybinds')
         .catch(() => { }) // User cancelled or empty - ignore
 }
 

@@ -1,5 +1,7 @@
 {{- if eq .chezmoi.osRelease.id "arch" -}}
 #!/bin/bash
+# package.json hash: {{ include "private_dot_config/private_ags/package.json" | sha256sum }}
+# tsconfig.json hash: {{ include "private_dot_config/private_ags/tsconfig.json" | sha256sum }}
 
 # Generate AGS type definitions (@girs/)
 AGS_DIR={{ joinPath .chezmoi.homeDir ".config/ags" | quote }}

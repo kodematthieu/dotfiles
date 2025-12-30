@@ -1,0 +1,153 @@
+configuration {
+    modi:                       "drun,run,window,clipboard:~/.config/rofi/scripts/clipboard.sh,keybinds:~/.config/rofi/scripts/keybinds.sh";
+    show-icons:                 true;
+    display-drun:               " Apps";
+    display-run:                " Run";
+    display-filebrowser:        " Files";
+    display-window:             " Windows";
+    display-clipboard:          " Clipboard";
+    display-keybinds:           " Keybinds";
+    drun-display-format:        "{name}";
+    window-format:              "{w} · {c} · {t}";
+    font:                       "JetBrainsMono Nerd Font 11";
+}
+
+@import "colors.rasi"
+
+window {
+    transparency:               "real";
+    location:                   center;
+    anchor:                     center;
+    fullscreen:                 false;
+    width:                      600px;
+    x-offset:                   0px;
+    y-offset:                   0px;
+
+    enabled:                    true;
+    margin:                     0px;
+    padding:                    0px;
+    border:                     2px;
+    border-radius:              12px;
+    border-color:               @blue;
+    background-color:           @base;
+    cursor:                     "default";
+}
+
+mainbox {
+    enabled:                    true;
+    spacing:                    0px;
+    margin:                     0px;
+    padding:                    0px;
+    border:                     0px;
+    border-radius:              0px 0px 0px 0px;
+    border-color:               @blue;
+    background-color:           transparent;
+    children:                   [ "inputbar", "listview" ];
+}
+
+inputbar {
+    enabled:                    true;
+    spacing:                    10px;
+    margin:                     0px;
+    padding:                    15px;
+    border:                     0px;
+    border-radius:              0px;
+    border-color:               @blue;
+    background-color:           @base-light;
+    text-color:                 @text;
+    children:                   [ "prompt", "entry" ];
+}
+
+prompt {
+    enabled:                    true;
+    background-color:           inherit;
+    text-color:                 inherit;
+}
+
+textbox-prompt-colon {
+    enabled:                    true;
+    expand:                     false;
+    str:                        "::";
+    background-color:           inherit;
+    text-color:                 inherit;
+}
+
+entry {
+    enabled:                    true;
+    background-color:           inherit;
+    text-color:                 inherit;
+    cursor:                     text;
+    placeholder:                "Search...";
+    placeholder-color:          inherit;
+}
+
+listview {
+    enabled:                    true;
+    columns:                    1;
+    lines:                      8;
+    cycle:                      true;
+    dynamic:                    true;
+    scrollbar:                  false;
+    layout:                     vertical;
+    reverse:                    false;
+    fixed-height:               true;
+    fixed-columns:              true;
+    
+    spacing:                    5px;
+    margin:                     0px;
+    padding:                    10px;
+    border:                     0px;
+    border-radius:              0px;
+    border-color:               @blue;
+    background-color:           transparent;
+    text-color:                 @text;
+    cursor:                     "default";
+}
+
+element {
+    enabled:                    true;
+    spacing:                    10px;
+    margin:                     0px;
+    padding:                    8px;
+    border:                     0px;
+    border-radius:              8px;
+    border-color:               @blue;
+    background-color:           transparent;
+    text-color:                 @text;
+    cursor:                     pointer;
+}
+
+element normal.normal {
+    background-color:           transparent;
+    text-color:                 @text;
+}
+
+element selected.normal {
+    background-color:           @surface1;
+    text-color:                 @blue;
+}
+
+element-icon {
+    background-color:           transparent;
+    text-color:                 inherit;
+    size:                       24px;
+    cursor:                     inherit;
+}
+
+element-text {
+    background-color:           transparent;
+    text-color:                 inherit;
+    highlight:                  inherit;
+    cursor:                     inherit;
+    vertical-align:             0.5;
+    horizontal-align:           0.0;
+}
+
+error-message {
+    padding:                    15px;
+    border:                     2px solid;
+    border-radius:              12px;
+    border-color:               @red;
+    background-color:           @base;
+    text-color:                 @text;
+}

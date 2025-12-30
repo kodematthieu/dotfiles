@@ -1,5 +1,6 @@
 @use 'scss/variables' as *;
-@use 'src/components/Bar/style';
+@use 'src/components/Bar/style' as bar-style;
+@use 'src/components/Menu/style' as menu-style;
 
 * {
   all: unset;
