@@ -7,12 +7,25 @@ export default function Workspaces() {
     const [focused, setFocused] = createState(hypr.get_focused_workspace())
     const [workspaces, setWorkspaces] = createState(hypr.get_workspaces())
     const [clients, setClients] = createState(hypr.get_clients())
+    const [magic, setMagic] = createState(false);
 
     hypr.connect("notify::focused-workspace", () => setFocused(hypr.focusedWorkspace))
     hypr.connect("notify::workspaces", () => setWorkspaces(hypr.workspaces))
     hypr.connect("notify::clients", () => setClients(hypr.clients))
+    hypr.connect("event", (self, type, args) => {
+        if(type == "activespecialv2") {
+            let [id, name] = args.split(",");
+            if(name == "special:magic") {
+                setMagic(true);
+            } else if(id == "") {
+                setMagic(false);
+            }
+            return;
+        }
+    })
 
     const dispatch = (arg: string) => hypr.dispatch("workspace", arg)
+    const dispatchToggleMagic = () => hypr.dispatch("togglespecialworkspace", "magic")
 
     // Combine focused, list, and clients into a single reactive object
     const workspacesData = createComputed(() => {
@@ -36,7 +49,7 @@ export default function Workspaces() {
                 : "Empty Workspace"
 
             return {
-                id: ws.id,
+                id: ws.name == "special:magic" ? "S" : ws.id,
                 active: focusedId === ws.id,
                 tooltip: tooltip
             }
@@ -52,8 +65,8 @@ export default function Workspaces() {
                     <box spacing={8}
                         children={list.map((ws: any) => (
                             <button
-                                onClicked={() => focusedId !== ws.id && dispatch(ws.id.toString())}
-                                class={`workspace-item ${ws.active ? "active" : ""}`}
+                                onClicked={() => ws.id == "S" ? dispatchToggleMagic() : focusedId !== ws.id && dispatch(ws.id.toString())}
+                                class={`workspace-item ${ws.id == "S" ? "magic" : ""} ${ws.active || (ws.id == "S" && magic()) ? "active" : ""}`}
                                 tooltipMarkup={ws.tooltip}
                             >
                                 <label label={ws.id.toString()} />

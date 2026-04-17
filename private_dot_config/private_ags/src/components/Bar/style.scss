@@ -126,6 +126,14 @@ window.bar {
                     background-color: $mauve;
                 }
             }
+
+            &.active.magic {
+                background-color: $green;
+
+                &:hover {
+                    background-color: $yellow;
+                }
+            }
         }
     }
 
